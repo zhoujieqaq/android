@@ -1,0 +1,4 @@
+include ':app', ':sample', ':library'
+rootProject.name='day10-26'
+project(':sample').projectDir = new File('Floating-Navigation-View-master/sample')
+project(':library').projectDir = new File('Floating-Navigation-View-master/library')
