@@ -1,4 +1,15 @@
 <resources>
-    <string name="app_name">day10-26</string>
-    <string name="title">SelectPhotoActivity</string>
+    <string name="app_name">App</string>
+    <string name="developer">André Mion</string>
+    <string name="website">https://github.com/andremion</string>
+    <string name="menu_item_import">Import</string>
+    <string name="menu_item_gallery">Gallery</string>
+    <string name="menu_item_slideshow">Slideshow</string>
+    <string name="menu_item_tools">Tools</string>
+    <string name="menu_group_communicate">Communicate</string>
+    <string name="menu_item_share">Share</string>
+    <string name="menu_item_send">Send</string>
+    <string name="title_activity_upload">UploadActivity</string>
+    <string name="title_activity_detect_beauty">detectBeautyActivity</string>
+    <string name="title_activity_detect_score">DetectScoreActivity</string>
 </resources>

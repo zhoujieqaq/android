@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.andremion.floatingnavigationview.FloatingNavigationView;
@@ -36,8 +37,9 @@ import org.json.JSONException;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Base64;
 
-public class MainActivity extends AppCompatActivity {
+public class DetectScoreActivity extends AppCompatActivity {
     private FloatingNavigationView mFloatingNavigationView;
     private Uri uri;
     private ImageView photo;
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main1);
+        setContentView(R.layout.activity_detect_score);
         photo = findViewById(R.id.photo);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -68,13 +70,13 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 //页面跳转
                 if (item.getTitle().equals("人脸检测")) {
-                    intent.setClass(MainActivity.this, MainActivity.class);
+                    intent.setClass(DetectScoreActivity.this, MainActivity.class);
                 } else if (item.getTitle().equals("人脸上传")) {
-                    intent.setClass(MainActivity.this, UploadActivity.class);
+                    intent.setClass(DetectScoreActivity.this, UploadActivity.class);
                 } else if (item.getTitle().equals("颜值检测")) {
-                    intent.setClass(MainActivity.this, DetectScoreActivity.class);
+                    intent.setClass(DetectScoreActivity.this, DetectScoreActivity.class);
                 } else {
-                    intent.setClass(MainActivity.this, MainActivity.class);
+                    intent.setClass(DetectScoreActivity.this, MainActivity.class);
                 }
                 startActivity(intent);
                 mFloatingNavigationView.close();
@@ -100,43 +102,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //按钮点击多人人脸识别
-    //多张人脸检索
-    public void multiSearch(View view) {
-        new Thread() {
-            @Override
-            public void run() {
-                String base64 = null;
-                try {
-                    base64 = App.toBase64(fileBuf);
-                }catch (NullPointerException e){
-                    Looper.prepare();
-                    Toast.makeText(MainActivity.this, "请选择图片", Toast.LENGTH_SHORT).show();
-                    Looper.loop();
-                }
-                String rs = App.multiSearchFaceWithBase64(base64, "test5");
-                System.out.println(rs);
-                RsResult rsResult = new RsResult();
-                try {
-                    pList = rsResult.multiSearchInfo(rs);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                //跳转到MainActivity界面
-//                Intent intent = new Intent(SelectPhotoActivity.this,MainActivity.class);
-//                intent.putExtra("pList",pList);
-//                startActivity(intent);
+   //按钮点击颜值评测
+    public void detect(View view){
 
-                //跳转到ResultActivity界面
-                Intent intent = new Intent(MainActivity.this, ResultActivity.class);
-                //到图片传给结果界面
-                intent.putExtra("uri", uri.toString());
-                //把人物信息传给结果界面
-                intent.putExtra("pList", pList);
-                startActivity(intent);
+            new Thread() {
+                @Override
+                public void run() {
+                    String base64 = null;
+                    try {
+                        base64 = App.toBase64(fileBuf);
+                    }catch (NullPointerException e){
+                        Looper.prepare();
+                        Toast.makeText(DetectScoreActivity.this, "请选择图片", Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                    }
+                    String rs = App.detectFaceWithBase64(base64);
+                    System.out.println(rs);
+                    RsResult rsResult = new RsResult();
+                    //将返回信息放在tv中
+                    TextView tv = findViewById(R.id.tv_detect_result);
+                    tv.setText(rsResult.detectInfo(rs));
+                }
+            }.start();
 
-            }
-        }.start();
     }
 
     @Override

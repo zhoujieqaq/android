@@ -19,37 +19,31 @@ import android.os.Looper;
 import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.andremion.floatingnavigationview.FloatingNavigationView;
-import com.example.model.People;
 import com.example.services.App;
 import com.example.services.RsResult;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.json.JSONException;
-
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class UploadActivity extends AppCompatActivity {
     private FloatingNavigationView mFloatingNavigationView;
     private Uri uri;
     private ImageView photo;
     private String uploadFileName;
     private InputStream inputStream;
     private byte[] fileBuf;
-    private ArrayList<People> pList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main1);
+        setContentView(R.layout.activity_upload);
         photo = findViewById(R.id.photo);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -68,13 +62,13 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 //页面跳转
                 if (item.getTitle().equals("人脸检测")) {
-                    intent.setClass(MainActivity.this, MainActivity.class);
+                    intent.setClass(UploadActivity.this, MainActivity.class);
                 } else if (item.getTitle().equals("人脸上传")) {
-                    intent.setClass(MainActivity.this, UploadActivity.class);
+                    intent.setClass(UploadActivity.this, UploadActivity.class);
                 } else if (item.getTitle().equals("颜值检测")) {
-                    intent.setClass(MainActivity.this, DetectScoreActivity.class);
+                    intent.setClass(UploadActivity.this, DetectScoreActivity.class);
                 } else {
-                    intent.setClass(MainActivity.this, MainActivity.class);
+                    intent.setClass(UploadActivity.this, MainActivity.class);
                 }
                 startActivity(intent);
                 mFloatingNavigationView.close();
@@ -86,9 +80,6 @@ public class MainActivity extends AppCompatActivity {
 
     //按钮点击选择事件
     public void select(View view) {
-        Button uploadButton = findViewById(R.id.upload);
-        EditText nameEditText = findViewById(R.id.name);
-        EditText idEditText = findViewById(R.id.id);
         String[] permissions = new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         };
@@ -100,43 +91,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //按钮点击多人人脸识别
-    //多张人脸检索
-    public void multiSearch(View view) {
+    //按钮点击上传事件
+    //图片上传的处理
+    public void upload(View view) {
         new Thread() {
             @Override
             public void run() {
-                String base64 = null;
-                try {
-                    base64 = App.toBase64(fileBuf);
-                }catch (NullPointerException e){
-                    Looper.prepare();
-                    Toast.makeText(MainActivity.this, "请选择图片", Toast.LENGTH_SHORT).show();
-                    Looper.loop();
-                }
-                String rs = App.multiSearchFaceWithBase64(base64, "test5");
+                //获取编辑框中的内容
+                EditText txtName = (EditText)findViewById(R.id.et_name);
+                String name = txtName.getText().toString();
+                EditText user_id = (EditText)findViewById(R.id.et_userid);
+                String id = user_id.getText().toString();
+                String base64 = App.toBase64(fileBuf);
+                String rs=App.addFaceWithBase64(base64,"test5",id,name);
                 System.out.println(rs);
                 RsResult rsResult = new RsResult();
-                try {
-                    pList = rsResult.multiSearchInfo(rs);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if(rsResult.isSuccess(rs)) {
+                    Looper.prepare();
+                    Toast.makeText(UploadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+                    Looper.loop();
                 }
-                //跳转到MainActivity界面
-//                Intent intent = new Intent(SelectPhotoActivity.this,MainActivity.class);
-//                intent.putExtra("pList",pList);
-//                startActivity(intent);
-
-                //跳转到ResultActivity界面
-                Intent intent = new Intent(MainActivity.this, ResultActivity.class);
-                //到图片传给结果界面
-                intent.putExtra("uri", uri.toString());
-                //把人物信息传给结果界面
-                intent.putExtra("pList", pList);
-                startActivity(intent);
-
             }
         }.start();
+
     }
 
     @Override
@@ -179,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         }
         try {
             inputStream = getContentResolver().openInputStream(uri);
-            fileBuf = convertToBytes(inputStream);
+            fileBuf=convertToBytes(inputStream);
             Bitmap bitmap = BitmapFactory.decodeByteArray(fileBuf, 0, fileBuf.length);
             photo.setImageBitmap(bitmap);
         } catch (Exception e) {
@@ -190,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     //转为对象数组
-    private byte[] convertToBytes(InputStream inputStream) throws Exception {
+    private byte[] convertToBytes(InputStream inputStream) throws Exception{
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         byte[] buf = new byte[1024];
         int len = 0;
@@ -199,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
         }
         out.close();
         inputStream.close();
-        return out.toByteArray();
+        return  out.toByteArray();
     }
 
 
