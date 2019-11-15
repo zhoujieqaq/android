@@ -18,6 +18,14 @@
 
     </com.example.model.MyImageView>
 
+    <TextView
+        android:id="@+id/tv_search_result"
+        android:layout_below="@+id/photo"
+        android:hint="从左到右依次是"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        />
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

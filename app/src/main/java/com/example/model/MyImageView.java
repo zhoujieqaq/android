@@ -48,7 +48,7 @@ public class MyImageView extends AppCompatImageView {
             paint.setColor(Color.BLUE);
             paint.setTextSize(50);
             canvas.rotate(p.getRoration());
-            canvas.drawText(p.toString(), (float) p.getLeft()+p.getWidth(), (float) p.getTop()+p.getHeight()/2, paint);
+            canvas.drawText(p.toString(), (float) p.getLeft(), (float) p.getTop(), paint);
         }
     }
 

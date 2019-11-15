@@ -86,9 +86,6 @@ public class MainActivity extends AppCompatActivity {
 
     //按钮点击选择事件
     public void select(View view) {
-        Button uploadButton = findViewById(R.id.upload);
-        EditText nameEditText = findViewById(R.id.name);
-        EditText idEditText = findViewById(R.id.id);
         String[] permissions = new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         };
@@ -117,6 +114,12 @@ public class MainActivity extends AppCompatActivity {
                 String rs = App.multiSearchFaceWithBase64(base64, "test5");
                 System.out.println(rs);
                 RsResult rsResult = new RsResult();
+                if(!rsResult.isSuccess(rs)){
+                    Looper.prepare();
+                    Toast.makeText(MainActivity.this, "查找失败，请选择一张库中人脸", Toast.LENGTH_SHORT).show();
+                    Looper.loop();
+                    return;
+                }
                 try {
                     pList = rsResult.multiSearchInfo(rs);
                 } catch (JSONException e) {

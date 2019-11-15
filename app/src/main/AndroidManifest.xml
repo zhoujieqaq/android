@@ -16,10 +16,6 @@
         <activity
             android:name=".DetectScoreActivity"
             android:label="@string/title_activity_detect_score"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
-            android:name=".DetectBeautyActivity"
-            android:label="@string/title_activity_detect_beauty"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UploadActivity"
@@ -37,6 +33,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="me.iwf.photopicker.PhotoPickerActivity"
+
+            android:configChanges="orientation|screenSize"/>
+
+
     </application>
 
 </manifest>

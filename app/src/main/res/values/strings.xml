@@ -12,4 +12,5 @@
     <string name="title_activity_upload">UploadActivity</string>
     <string name="title_activity_detect_beauty">detectBeautyActivity</string>
     <string name="title_activity_detect_score">DetectScoreActivity</string>
+    <string name="title_activity_merge">MergeActivity</string>
 </resources>

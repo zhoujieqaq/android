@@ -8,6 +8,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -21,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.andremion.floatingnavigationview.FloatingNavigationView;
@@ -94,15 +96,36 @@ public class UploadActivity extends AppCompatActivity {
     //按钮点击上传事件
     //图片上传的处理
     public void upload(View view) {
+
         new Thread() {
             @Override
             public void run() {
+                //进度条显示
+
+                String base64 = null;
                 //获取编辑框中的内容
-                EditText txtName = (EditText)findViewById(R.id.et_name);
-                String name = txtName.getText().toString();
-                EditText user_id = (EditText)findViewById(R.id.et_userid);
-                String id = user_id.getText().toString();
-                String base64 = App.toBase64(fileBuf);
+                EditText txtName = null;
+                EditText user_id = null;
+                String name = null;
+                String id = null;
+                try {
+                    txtName = (EditText) findViewById(R.id.et_name);
+                    name = txtName.getText().toString();
+                    user_id = (EditText) findViewById(R.id.et_userid);
+                    id = user_id.getText().toString();
+                }catch (Exception e){
+                    Looper.prepare();
+                    Toast.makeText(UploadActivity.this, "请输入用户信息", Toast.LENGTH_SHORT).show();
+                    Looper.loop();
+                    return;
+                }
+                try {
+                    base64 = App.toBase64(fileBuf);
+                }catch (NullPointerException e){
+                    Looper.prepare();
+                    Toast.makeText(UploadActivity.this, "请选择图片", Toast.LENGTH_SHORT).show();
+                    Looper.loop();
+                }
                 String rs=App.addFaceWithBase64(base64,"test5",id,name);
                 System.out.println(rs);
                 RsResult rsResult = new RsResult();
@@ -110,6 +133,13 @@ public class UploadActivity extends AppCompatActivity {
                     Looper.prepare();
                     Toast.makeText(UploadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
                     Looper.loop();
+                }else{
+                    if(!rsResult.isSuccess(rs)){
+                        Looper.prepare();
+                        Toast.makeText(UploadActivity.this, "请选择一张人脸", Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                        return;
+                    }
                 }
             }
         }.start();

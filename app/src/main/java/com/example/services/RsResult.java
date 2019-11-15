@@ -36,6 +36,8 @@ public class RsResult { //存返回结果的对象
         return flag;
     }
 
+
+
     //获取单张搜索成功时的信息
     public ArrayList<People> searchInfo(String rs){
         FaceInfo faceInfo = new FaceInfo(rs);
@@ -98,5 +100,15 @@ public class RsResult { //存返回结果的对象
             }
         }
         return info;
+    }
+
+    //获取融合后返回的base64
+    public String faceMerge(String rs) throws JSONException {
+
+        JSONObject jsonObject = new JSONObject(rs);
+        JSONObject result = jsonObject.optJSONObject("result");
+        String merge_image = result.optString("merge_image");
+        System.out.println(merge_image);
+        return merge_image;
     }
 }

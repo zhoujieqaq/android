@@ -25,6 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ResultActivity extends AppCompatActivity {
 
@@ -37,6 +38,7 @@ public class ResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
         photo = findViewById(R.id.photo);
+
         // photo = findViewById(R.id.photo);
         // photo.setText("HELLO");
         //获取传递过来的图片
@@ -56,11 +58,20 @@ public class ResultActivity extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeByteArray(fileBuf, 0, fileBuf.length);
         //获取传递过来的plist值
         pList = this.getIntent().getExtras().getParcelableArrayList("pList");
+        //pList根据离照片左边距离排序
+        for (int i = 0;i <= pList.size();i++)
+            for(int j = 0;j < pList.size()-i-1;j++){
+                if(pList.get(j).getLeft() > pList.get(j + 1).getLeft()){
+                    People p = pList.get(j);
+                    pList.set(j,pList.get(j+1));
+                    pList.set(j+1,p);
+                }
+            }
+
         photo.setImageBitmap(bitmap);
         //从pList中获取每个人脸的信息,并置入自定义ImageView中显示
         photo.setpList(pList);
-        //获取传递过来的plist值
-        pList = this.getIntent().getExtras().getParcelableArrayList("pList");
+
         // 获取界面ListView组件
         ListView listView = (ListView) findViewById(R.id.lv);
 

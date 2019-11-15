@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -104,7 +105,6 @@ public class DetectScoreActivity extends AppCompatActivity {
 
    //按钮点击颜值评测
     public void detect(View view){
-
             new Thread() {
                 @Override
                 public void run() {
@@ -119,6 +119,12 @@ public class DetectScoreActivity extends AppCompatActivity {
                     String rs = App.detectFaceWithBase64(base64);
                     System.out.println(rs);
                     RsResult rsResult = new RsResult();
+                    if(!rsResult.isSuccess(rs)){
+                        Looper.prepare();
+                        Toast.makeText(DetectScoreActivity.this, "请选择一张人脸", Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                        return;
+                    }
                     //将返回信息放在tv中
                     TextView tv = findViewById(R.id.tv_detect_result);
                     tv.setText(rsResult.detectInfo(rs));
