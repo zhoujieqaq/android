@@ -34,7 +34,7 @@ public class App {
             addUrl+=access_token;
             searchUrl+=access_token;
             multiSearchUrl+=access_token;
-            faceMergeUrl+=access_token;
+            faceMergeUrl+=access_token ;
         } catch (Exception e) {
             e.printStackTrace();
         }

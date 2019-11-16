@@ -126,7 +126,7 @@ public class UploadActivity extends AppCompatActivity {
                     Toast.makeText(UploadActivity.this, "请选择图片", Toast.LENGTH_SHORT).show();
                     Looper.loop();
                 }
-                String rs=App.addFaceWithBase64(base64,"test5",id,name);
+                String rs=App.addFaceWithBase64(base64,"appFace",id,name);
                 System.out.println(rs);
                 RsResult rsResult = new RsResult();
                 if(rsResult.isSuccess(rs)) {

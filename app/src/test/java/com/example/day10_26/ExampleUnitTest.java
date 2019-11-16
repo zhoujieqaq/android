@@ -56,31 +56,31 @@ public class ExampleUnitTest {
 
     }
 
-    @Test
-    public void test5() throws Exception{
-        String path="C:\\Users\\28330\\Desktop\\image\\abc.jpg";
-        OkHttpClient client=new OkHttpClient();
-
-        //上传文件域的请求体部分
-        RequestBody formBody=  RequestBody
-                .create(new File(path), MediaType.parse("image/jpeg"));
-
-        //整个上传的请求体部分（普通表单+文件上传域）
-        RequestBody requestBody=new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("title", "Square Logo")
-                //filename:avatar,originname:abc.jpg
-                .addFormDataPart("avatar", "abc.jpg",formBody)
-                .build();
-
-        Request request = new Request.Builder()
-                .url("http://localhost:8000/upload")
-                .post(requestBody)
-                .build();
-        Response response = client.newCall(request).execute();
-
-        System.out.println(response.body().string());
-    }
+//    @Test
+//    public void test5() throws Exception{
+//        String path="C:\\Users\\28330\\Desktop\\image\\abc.jpg";
+//        OkHttpClient client=new OkHttpClient();
+//
+//        //上传文件域的请求体部分
+//        RequestBody formBody=  RequestBody
+//                .create(new File(path), MediaType.parse("image/jpeg"));
+//
+//        //整个上传的请求体部分（普通表单+文件上传域）
+//        RequestBody requestBody=new MultipartBody.Builder()
+//                .setType(MultipartBody.FORM)
+//                .addFormDataPart("title", "Square Logo")
+//                //filename:avatar,originname:abc.jpg
+//                .addFormDataPart("avatar", "abc.jpg",formBody)
+//                .build();
+//
+//        Request request = new Request.Builder()
+//                .url("http://localhost:8000/upload")
+//                .post(requestBody)
+//                .build();
+//        Response response = client.newCall(request).execute();
+//
+//        System.out.println(response.body().string());
+//    }
 
     @Test
     public void testMerge() throws JSONException {

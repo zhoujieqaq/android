@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "请选择图片", Toast.LENGTH_SHORT).show();
                     Looper.loop();
                 }
-                String rs = App.multiSearchFaceWithBase64(base64, "test5");
+                String rs = App.multiSearchFaceWithBase64(base64, "appFace");
                 System.out.println(rs);
                 RsResult rsResult = new RsResult();
                 if(!rsResult.isSuccess(rs)){
